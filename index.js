@@ -264,7 +264,15 @@ Gr.prototype.getTagsByPath = function(cwd) {
 
 Gr.prototype.addAll = function() {
   var self = this;
-  if (this.config && this.config.items && this.config.items.tags) {
+  var tag = process.env.gr_defaultTag || this.config.items.defaultTag
+  if (this.config && this.config.items && this.config.items.tags && tag) {
+    if (Array.isArray(self.config.items.tags[tag])) {
+      self.config.items.tags[tag].forEach(function(dirname) {
+        self.directories.push(dirname);
+      });
+    }
+  }
+  else if (this.config && this.config.items && this.config.items.tags) {
     Object.keys(this.config.items.tags).forEach(function(tag) {
       if (Array.isArray(self.config.items.tags[tag])) {
         self.config.items.tags[tag].forEach(function(dirname) {
